@@ -120,13 +120,18 @@ resource "aws_security_group" "web_sg" {
 
 
 resource "aws_instance" "web_instance" {
-    ami= "ami-051f7e7f6c2f40dc1"
+    ami= "ami-053b0d53c279acc90"
     instance_type = "t2.micro"
     key_name = "MyKeyPair"
   
     subnet_id = aws_subnet.nearo-ps-1.id
     vpc_security_group_ids = [aws_security_group.web_sg.id]
     associate_public_ip_address = true
+
+    for_each = toset(["jenkins-master", "build-slave", "ansible"])
+
+
+    /*
 
     user_data = <<-EOF
     #!/bin/bash -ex
@@ -136,9 +141,10 @@ resource "aws_instance" "web_instance" {
     systemctl enable nginx
     systemctl start nginx
     EOF
+*/
 
     tags = {
-        "name"="Sreeni"
+        Name="${each.key}"
     }
 
 }
