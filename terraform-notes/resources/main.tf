@@ -107,7 +107,17 @@ resource "aws_security_group" "web_sg" {
         to_port = 80
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
+ 
     }
+
+    ingress {
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+from_port = 22
+    to_port = 22
+    protocol = "tcp"
+  }
 
     egress {
         from_port = 0
@@ -122,7 +132,7 @@ resource "aws_security_group" "web_sg" {
 resource "aws_instance" "web_instance" {
     ami= "ami-053b0d53c279acc90"
     instance_type = "t2.micro"
-    key_name = "MyKeyPair"
+    key_name = "ssp"
   
     subnet_id = aws_subnet.nearo-ps-1.id
     vpc_security_group_ids = [aws_security_group.web_sg.id]
